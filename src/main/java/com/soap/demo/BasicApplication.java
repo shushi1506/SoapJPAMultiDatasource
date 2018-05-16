@@ -1,16 +1,19 @@
 package com.soap.demo;
 
-import com.soap.demo.endpoint.core.crud.ServiceCrudQlcb;
-import com.soap.demo.endpoint.core.crud.ServiceCrudQltb;
+import com.soap.demo.qlcb.model.ResultDmDonVi;
+import com.soap.demo.qlcb.repository.DmDonViRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.PageRequest;
+
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.soap.SOAPBinding;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 import static java.lang.System.exit;
@@ -51,15 +54,18 @@ public class BasicApplication implements CommandLineRunner {
 		log.info("Runnn");
 	}
 
-
-
+	@Autowired
+	DmDonViRepository dmDonViRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
-//		System.out.println("Dm Quoc Gia:"+serviceCrudQlcb.getAllDmQuocGia().size());
-//		System.out.println("Dm Tinh Thanh:"+serviceCrudQlcb.getAllDmTinhThanh().size());
-//		System.out.println("Auth item"+serviceCrudQltb.getAllAuthItem().size());
-//		exit(0);
+//		List<DmDonViEntity>dv=ServiceSumary.getDmDonViPage(2);
+//		System.out.println("Auth item"+ dv.get(1).getDmTinhThanh().getTenTinhThanh());
+//		List<ResultDmDonVi>t=dmDonViRepository.getDmDonVi();
+		List<ResultDmDonVi>t=dmDonViRepository.getDmDonViPage(new PageRequest(2,50)).getContent();
+
+		System.out.println(t.size());
+		exit(0);
 	}
 
 }

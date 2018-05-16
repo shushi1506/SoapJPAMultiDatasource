@@ -23,8 +23,8 @@ public class DmTinhThanh implements Serializable{
     private String maTinhThanh;
     @Column(name = "TEN_TINH_THANH",length = 350)
     private String tenTinhThanh;
-    @Column(name = "LAST_UPDATE")
-    private Date lastUpdate;
+//    @Column(name = "LAST_UPDATE")
+//    private Date lastUpdate;
 
     public DmTinhThanh() {
     }
@@ -53,13 +53,13 @@ public class DmTinhThanh implements Serializable{
         this.tenTinhThanh = tenTinhThanh;
     }
 
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+//    public Date getLastUpdate() {
+//        return lastUpdate;
+//    }
+//
+//    public void setLastUpdate(Date lastUpdate) {
+//        this.lastUpdate = lastUpdate;
+//    }
 
     @Override
     public String toString() {
@@ -67,7 +67,7 @@ public class DmTinhThanh implements Serializable{
                 "id=" + id +
                 ", maTinhThanh='" + maTinhThanh + '\'' +
                 ", tenTinhThanh='" + tenTinhThanh + '\'' +
-                ", lastUpdate=" + lastUpdate +
+//                ", lastUpdate=" + lastUpdate +
                 '}';
     }
 }
