@@ -1,7 +1,7 @@
 package com.soap.demo.endpoint.implemented.basic.read;
 
 import com.soap.demo.endpoint.implemented.basic.BasicResponse;
-import com.soap.demo.endpoint.implemented.basic.model.DmDonViCungCap;
+import com.soap.demo.qltb.model.DmDonViCungcapEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,13 +16,13 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GetDmDonViCungCapResponse extends BasicResponse{
     @XmlElement(name = "dmDonViCungCaps")
-    private List<DmDonViCungCap>listDm=new ArrayList<>();
+    private List<DmDonViCungcapEntity>listDm=new ArrayList<>();
 
-    public List<DmDonViCungCap> getListDm() {
+    public List<DmDonViCungcapEntity> getListDm() {
         return listDm;
     }
 
-    public void setListDm(List<DmDonViCungCap> listDm) {
+    public void setListDm(List<DmDonViCungcapEntity> listDm) {
         this.listDm = listDm;
     }
 }

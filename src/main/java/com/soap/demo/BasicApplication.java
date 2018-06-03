@@ -1,31 +1,27 @@
 package com.soap.demo;
 
-import com.soap.demo.qlcb.model.ResultDmDonVi;
-import com.soap.demo.qlcb.repository.DmDonViRepository;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.PageRequest;
 
+import javax.naming.Context;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import javax.xml.ws.Endpoint;
 import javax.xml.ws.soap.SOAPBinding;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
+
+import java.util.Hashtable;
 import java.util.Properties;
 
-import static java.lang.System.exit;
+
 
 @SpringBootApplication
 public class BasicApplication implements CommandLineRunner {
-	static Logger log = Logger.getLogger(BasicApplication.class.getName());
-//	@Autowired
-//	ServiceCrudQlcb serviceCrudQlcb;
-//	@Autowired
-//	ServiceCrudQltb serviceCrudQltb;
-
+	static Logger log = LogManager.getLogger(BasicApplication.class.getName());
 	public static void main(String[] args) {
 		SpringApplication.run(BasicApplication.class, args);
 
@@ -54,18 +50,73 @@ public class BasicApplication implements CommandLineRunner {
 		log.info("Runnn");
 	}
 
-	@Autowired
-	DmDonViRepository dmDonViRepository;
+//	@Autowired
+//	DmDonViRepository dmDonViRepository;
+
 
 	@Override
 	public void run(String... args) throws Exception {
 //		List<DmDonViEntity>dv=ServiceSumary.getDmDonViPage(2);
 //		System.out.println("Auth item"+ dv.get(1).getDmTinhThanh().getTenTinhThanh());
-//		List<ResultDmDonVi>t=dmDonViRepository.getDmDonVi();
-		List<ResultDmDonVi>t=dmDonViRepository.getDmDonViPage(new PageRequest(2,50)).getContent();
+//		List<ResultDmDonVi>t=dmDonViRepository.getDmDonViQlcb();
 
-		System.out.println(t.size());
-		exit(0);
+//		Page<ResultDmDonVi>k=dmDonViRepository.getDmDonViPage(PageRequest.of(2,50, Sort.Direction.ASC,"id"));
+//		System.out.println(k.getTotalPages());
+//		System.out.println(k.getTotalElements());
+//		System.out.println(k.getPageable().getPageNumber());
+//		List<ResultDmDonVi>t=k.getContent();
+//		List<ResultCbCanBo> t= ServiceCrudDanhMuc.getResultCbCanBoQlcb();
+//		System.out.println(t.size());
+//		System.out.println(t.get(2).toString());
+//		ServiceSumary.deleteDmPhongBanById(1262);
+//		ServiceSumary.addDmTinhThanh();
+//		System.out.println();
+
+//		exit(0);
+//		DirContext t= checkBindLdap("cn=adminLdap","Oracle_123456a#");
+//		String baseDN = "dc=angiang,dc=dbhc,dc=bhxh,dc=vn";
+////		String filter = "(&(objectClass="
+////				+ "user-bhxh"
+////				+ ")(" + "user-bhxh-email" + "=" + "anhdn@vss.gov.vn" + "))";
+//		String filter="(objectClass=*)";
+//
+//		SearchControls searchCon = new SearchControls();
+//		searchCon.setSearchScope(SearchControls.ONELEVEL_SCOPE);
+//		searchCon.setReturningAttributes(new String[]{
+//				"dn"
+//		});
+//		NamingEnumeration results;
+//		results = t.search(baseDN, filter,searchCon);
+//		if (results != null) {
+//			while (results.hasMore()) {
+//				javax.naming.directory.SearchResult res = (javax.naming.directory.SearchResult) results.next();
+//				Attributes attr = res.getAttributes();
+//				System.out.println(res.getNameInNamespace());
+//				if (attr.get("dn") != null) {
+//					System.out.println(attr.get("dn").get());
+//				}
+//			}
+//		}
+//		if(t!=null){
+//			System.out.println("not null");
+//			t.close();
+//		}
 	}
 
+	private static Hashtable<String, String> ldapContext(Hashtable<String, String> env) throws Exception {
+		env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+		env.put(Context.PROVIDER_URL, "ldap://ldap-qltb.bhxh.vn:5389");
+		env.put(Context.REFERRAL, "ignore");
+		return env;
+	}
+	private DirContext checkBindLdap(String dn, String password) throws Exception {
+
+		Hashtable<String, String> env = new Hashtable<String, String>();
+		env.put(Context.SECURITY_AUTHENTICATION, "simple");
+		env.put("com.sun.jndi.ldap.read.timeout", "120000");
+		env.put(Context.SECURITY_PRINCIPAL, dn);
+		env.put(Context.SECURITY_CREDENTIALS, password);
+		return new InitialDirContext(ldapContext(env));
+
+	}
 }

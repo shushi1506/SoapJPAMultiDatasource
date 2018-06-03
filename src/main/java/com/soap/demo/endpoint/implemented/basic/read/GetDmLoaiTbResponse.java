@@ -1,7 +1,7 @@
 package com.soap.demo.endpoint.implemented.basic.read;
 
 import com.soap.demo.endpoint.implemented.basic.BasicResponse;
-import com.soap.demo.endpoint.implemented.basic.model.DmLoaiTb;
+import com.soap.demo.qltb.model.DmLoaiThietBiEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -16,13 +16,13 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GetDmLoaiTbResponse extends BasicResponse {
     @XmlElement(name = "dmLoaiTbs")
-    private List<DmLoaiTb>listDm=new ArrayList<>();
+    private List<DmLoaiThietBiEntity>listDm=new ArrayList<>();
 
-    public List<DmLoaiTb> getListDm() {
+    public List<DmLoaiThietBiEntity> getListDm() {
         return listDm;
     }
 
-    public void setListDm(List<DmLoaiTb> listDm) {
+    public void setListDm(List<DmLoaiThietBiEntity> listDm) {
         this.listDm = listDm;
     }
 }

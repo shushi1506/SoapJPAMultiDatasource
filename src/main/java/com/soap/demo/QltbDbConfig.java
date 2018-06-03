@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -33,27 +34,29 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class QltbDbConfig {
     @Bean
+    @Primary
     @ConfigurationProperties("app.datasource")
     public DataSourceProperties secondDataSourceProperties() {
         return new DataSourceProperties();
     }
 
     @Bean
+    @Primary
     @ConfigurationProperties("app.datasource")
-    public DataSource secondDataSource() {
+    public DataSource qltbDataSource() {
         return secondDataSourceProperties().initializeDataSourceBuilder().build();
     }
-
+    @Primary
     @Bean(name = "entityManagerFactoryqltb")
     public LocalContainerEntityManagerFactoryBean customerEntityManagerFactory(
             EntityManagerFactoryBuilder builder) {
         return builder
-                .dataSource(secondDataSource())
+                .dataSource(qltbDataSource())
                 .packages(AuthItem.class)
-                .persistenceUnit("dbtd")
+                .persistenceUnit("orcl")
                 .build();
     }
-
+    @Primary
     @Bean(name = "transactionManagerqltb")
     public PlatformTransactionManager transactionManager(
             @Qualifier("entityManagerFactoryqltb") EntityManagerFactory entityManagerFactory) {

@@ -1,30 +1,26 @@
 package com.soap.demo.endpoint.implemented.basic.read;
 
-import com.soap.demo.DefinedConfig;
 import com.soap.demo.endpoint.implemented.basic.BasicResponse;
-import com.soap.demo.endpoint.implemented.basic.model.DanhMucTinhThanh;
-import com.soap.demo.qlcb.model.DmTinhThanh;
+import com.soap.demo.qltb.model.DmTinhThanhEntity;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author anhbt 5/9/2018
+ * @author anhbt 5/26/2018
  * com.soap.demo.endpoint.implemented.basic.read
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GetDmTinhThanhResponse extends BasicResponse {
-    @XmlElement(name ="dmTinhThanhs",namespace = DefinedConfig.NAME_SPACE)
-    private List<DmTinhThanh> listDm=new ArrayList<>();
+    private List<DmTinhThanhEntity>listTt=new ArrayList<>();
 
-    public List<DmTinhThanh> getListDm() {
-        return listDm;
+    public List<DmTinhThanhEntity> getListTt() {
+        return listTt;
     }
 
-    public void setListDm(List<DmTinhThanh> listDm) {
-        this.listDm = listDm;
+    public void setListTt(List<DmTinhThanhEntity> listTt) {
+        this.listTt = listTt;
     }
 }

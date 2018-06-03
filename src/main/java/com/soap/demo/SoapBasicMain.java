@@ -2,17 +2,20 @@ package com.soap.demo;
 
 
 import com.soap.demo.endpoint.SoapInterfaceService;
-import com.soap.demo.endpoint.core.crud.ReadDanhMuc;
-import com.soap.demo.endpoint.core.crud.ServiceCrudQlcb;
-import com.soap.demo.endpoint.core.crud.ServiceCrudQltb;
-import com.soap.demo.endpoint.core.crud.ServiceSumary;
-import com.soap.demo.endpoint.implemented.basic.model.*;
+import com.soap.demo.endpoint.core.Utils.Commons;
+import com.soap.demo.endpoint.core.Utils.UploadFileSuccess;
+import com.soap.demo.endpoint.core.crud.ServiceCrudDanhMuc;
+import com.soap.demo.endpoint.implemented.basic.*;
+import com.soap.demo.endpoint.implemented.basic.create.CreateDmTinhThanhRequest;
+import com.soap.demo.endpoint.implemented.basic.create.CreateDmTinhThanhResponse;
 import com.soap.demo.endpoint.implemented.basic.read.*;
-import com.soap.demo.qlcb.model.DmTinhThanh;
+import com.soap.demo.endpoint.implemented.basic.update.UpdateDmTinhThanhRequest;
+import com.soap.demo.endpoint.implemented.basic.update.UpdateDmTinhThanhResponse;
 import com.soap.demo.qltb.model.AuthItem;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.soap.demo.qltb.model.DmTinhThanhEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.jws.WebMethod;
@@ -23,12 +26,10 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.WebFault;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author tunglt 5/5/2018
+ * @author anhbt 5/5/2018
  * com.tecapro.soap
  */
 @WebService(
@@ -48,28 +49,233 @@ import java.util.List;
 @Validated
 @EnableAutoConfiguration
 public class SoapBasicMain implements SoapInterfaceService {
+    static Logger log = LogManager.getLogger(BasicApplication.class.getName());
+//    /**
+//     * @param request
+//     * @return
+//     */
+//    @Override
+//    @WebMethod(
+//            action = "CategoriesQltb/GetDmDonViCungCap",
+//            operationName = "GetDmDonViCungCap",
+//            exclude = false
+//    )
+//    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+//    @RequestWrapper(
+//            localName = "QltbGetDmDonViCungCapRequest",
+//            targetNamespace = DefinedConfig.NAME_SPACE
+//    )
+//    @ResponseWrapper(
+//            localName = "QltbGetDmDonViCungCapResponse",
+//            targetNamespace = DefinedConfig.NAME_SPACE
+//    )
+//    public GetDmDonViCungCapResponse getDmDonViCungCap(@WebParam(
+//            name = "request",
+//            partName = "request",
+//            targetNamespace = DefinedConfig.NAME_SPACE) GetDmDonViCungCapRequest request) {
+//        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
+//        GetDmDonViCungCapResponse ret = new GetDmDonViCungCapResponse();
+//        try {
+//            List<DmDonViCungCap> temp = readDanhMuc.getDmDonViCungCap();
+//            if (temp != null) {
+//                if (temp.size() > 0) {
+//                    ret.setListDm(temp);
+//                    ret.setCount_((long) temp.size());
+//                    ret.setMessage_("Success");
+//                    ret.setStatus_(true);
+//                    return ret;
+//                } else {
+//                    ret.setStatus_(false);
+//                    ret.setMessage_("Fail");
+//                    return ret;
+//                }
+//            } else {
+//                ret.setStatus_(false);
+//                ret.setMessage_("Không đọc được dữ liệu");
+//                return ret;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            ret.setMessage_(e.getMessage());
+//            ret.getErrorCode(e.getErrorCode());
+//            ret.setStatus_(false);
+//            return ret;
+//        }
+//
+//    }
+
+//    /**
+//     * @param request
+//     * @return
+//     */
+//    @Override
+//    @WebMethod(
+//            action = "CategoriesQltb/GetDmNhomTb",
+//            operationName = "GetDmNhomTb",
+//            exclude = false
+//    )
+//    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+//    @RequestWrapper(
+//            localName = "QltbGetDmNhomTbRequest",
+//            targetNamespace = DefinedConfig.NAME_SPACE
+//    )
+//    @ResponseWrapper(
+//            localName = "QltbGetDmNhomTbResponse",
+//            targetNamespace = DefinedConfig.NAME_SPACE
+//    )
+//    public GetDmNhomTbResponse getDmNhomTB(@WebParam(
+//            name = "request",
+//            partName = "request",
+//            targetNamespace = DefinedConfig.NAME_SPACE) GetDmNhomTbRequest request) {
+//        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
+//        GetDmNhomTbResponse ret = new GetDmNhomTbResponse();
+//        try {
+//            List<DmNhomTB> temp = readDanhMuc.getDmNhomTB();
+//            if (temp != null) {
+//                if (temp.size() > 0) {
+//                    ret.setListDm(temp);
+//                    ret.setCount_((long) temp.size());
+//                    ret.setMessage_("Success");
+//                    ret.setStatus_(true);
+//                    return ret;
+//                } else {
+//                    ret.setStatus_(false);
+//                    ret.setMessage_("Fail");
+//                    return ret;
+//                }
+//            } else {
+//                ret.setStatus_(false);
+//                ret.setMessage_("Không đọc được dữ liệu");
+//                return ret;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            ret.setMessage_(e.getMessage());
+//            ret.getErrorCode(e.getErrorCode());
+//            ret.setStatus_(false);
+//            return ret;
+//        }
+//
+//    }
+//
+//    /**
+//     * @param request
+//     * @return
+//     */
+//    @Override
+//    @WebMethod(
+//            action = "CategoriesQltb/GetDmLoaiTb",
+//            operationName = "GetDmLoaiTb",
+//            exclude = false
+//    )
+//    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+//    @RequestWrapper(
+//            localName = "QltbGetDmLoaiTbRequest",
+//            targetNamespace = DefinedConfig.NAME_SPACE
+//    )
+//    @ResponseWrapper(
+//            localName = "QltbGetDmLoaiTbResponse",
+//            targetNamespace = DefinedConfig.NAME_SPACE
+//    )
+//    public GetDmLoaiTbResponse getDmLoaiTB(@WebParam(
+//            name = "request",
+//            partName = "request",
+//            targetNamespace = DefinedConfig.NAME_SPACE) GetDmLoaiTbRequest request) {
+//        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
+//        GetDmLoaiTbResponse ret = new GetDmLoaiTbResponse();
+//        try {
+//            List<DmLoaiTb> temp = readDanhMuc.getDmLoaiTb();
+//            if (temp != null) {
+//                if (temp.size() > 0) {
+//                    ret.setListDm(temp);
+//                    ret.setCount_((long) temp.size());
+//                    ret.setMessage_("Success");
+//                    ret.setStatus_(true);
+//                    return ret;
+//                } else {
+//                    ret.setStatus_(false);
+//                    ret.setMessage_("Fail");
+//                    return ret;
+//                }
+//            } else {
+//                ret.setStatus_(false);
+//                ret.setMessage_("Không đọc được dữ liệu");
+//                return ret;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            ret.setMessage_(e.getMessage());
+//            ret.getErrorCode(e.getErrorCode());
+//            ret.setStatus_(false);
+//            return ret;
+//        }
+//
+//    }
+
+    /**
+     * @param request
+     * @return
+     */
     @Override
     @WebMethod(
-            action = "CategoriesQltb/GetStudent",
-            operationName = "GetAuthentication",
+            action = "CategoriesQltb/SaveFileToFtp",
+            operationName = "SaveFileToFtp",
             exclude = false
     )
     @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
     @RequestWrapper(
-            localName = "QltbGetStudentRequest",
+            localName = "SaveFileToFtpRequest",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
     @ResponseWrapper(
-            localName = "QltbGetStudentResponse",
+            localName = "SaveFileToFtpResponse",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
-    public GetStudentResponse getTest(@WebParam(
+    public SaveFileFtpRespone saveFileToFtp(@WebParam(
             name = "request",
             partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    ) GetStudentRequest request) {
-        System.out.println(request.getUserId());
-        GetStudentResponse ret = new GetStudentResponse();
+            targetNamespace = DefinedConfig.NAME_SPACE) SaveFileFtpRequest request) {
+        SaveFileFtpRespone ret = new SaveFileFtpRespone();
+        List<FileSftp> listFile = request.getListFile();
+        if (listFile == null || listFile.size() == 0) {
+            ret.setErrorCode("S06");
+            ret.setMessage("No file upload");
+            return ret;
+        } else {
+            String temp = request.checkList();
+            if (!temp.isEmpty()) {
+                ret.setErrorCode("S07");
+                ret.setMessage(temp);
+                return ret;
+            }
+        }
+        Commons cm = new Commons();
+
+//        if(encoded== null){
+//            ret.setErrorCode("S04");
+//            ret.setMessage("No string encoded base 64");
+//            return ret;
+//        }
+//        if(file== null){
+//            ret.setErrorCode("S05");
+//            ret.setMessage("No file name");
+//            return ret;
+//        }
+//        if(type<1 || type >5){
+//            ret.setErrorCode("S06");
+//            ret.setMessage("No type upload");
+//            return ret;
+//        }
+        List<UploadFileSuccess> sp = cm.upLoadListFile(listFile);
+        if (sp.size() == listFile.size()) {
+            ret.setMessage("Success");
+            ret.setErrorCode("00");
+            ret.setSuccessList(sp);
+        } else {
+            ret.setErrorCode("S11");
+            ret.setMessage("Error file");
+            ret.setSuccessList(sp);
+        }
         return ret;
     }
 
@@ -79,43 +285,46 @@ public class SoapBasicMain implements SoapInterfaceService {
      */
     @Override
     @WebMethod(
-            action = "CategoriesQltb/GetDmPhongBan",
-            operationName = "GetDmPhongBan",
+            action = "CategoriesQltb/GetAuthItem",
+            operationName = "GetAuthItem",
             exclude = false
     )
     @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
     @RequestWrapper(
-            localName = "QltbGetDmPhongBanRequest",
+            localName = "GetAuthenItemRequest",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
     @ResponseWrapper(
-            localName = "QltbGetDmPhongBanResponse",
+            localName = "GetAuthenItemRespone",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
-    public GetDmPhongBanResponse getDmPhongBan(@WebParam(
+    public GetAuthenItemRespone getAuthItem(@WebParam(
             name = "request",
             partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE) GetDmPhongBanRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
-        GetDmPhongBanResponse ret = new GetDmPhongBanResponse();
+            targetNamespace = DefinedConfig.NAME_SPACE) GetAuthenItemRequest request) {
+        GetAuthenItemRespone ret = new GetAuthenItemRespone();
         try {
-            List<DanhMucPhongBan> temp = readDanhMuc.getDmPhongBan();
-            if (temp.size() > 0) {
-                ret.setListDm(temp);
-                ret.setCount_((long) temp.size());
-                ret.setMessage_("Success");
-                ret.setStatus_(true);
-                return ret;
+            List<AuthItem> temp = ServiceCrudDanhMuc.getAllAuthItem();
+            if (temp != null) {
+                if (temp.size() > 0) {
+                    ret.setList(temp);
+                    ret.setCount_((long) temp.size());
+                    ret.setMessage_("Success");
+                    ret.setStatus_(true);
+                    return ret;
+                } else {
+                    ret.setStatus_(false);
+                    ret.setMessage_("Fail");
+                    return ret;
+                }
             } else {
                 ret.setStatus_(false);
-                ret.setMessage_("Fail");
+                ret.setMessage_("Không đọc được dữ liệu");
                 return ret;
             }
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             ret.setMessage_(e.getMessage());
-            ret.getErrorCode(e.getErrorCode());
             ret.setStatus_(false);
             return ret;
         }
@@ -134,371 +343,166 @@ public class SoapBasicMain implements SoapInterfaceService {
     )
     @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
     @RequestWrapper(
-            localName = "QltbGetDmTinhThanhRequest",
+            localName = "GetDmTinhThanhRequest",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
     @ResponseWrapper(
-            localName = "QltbGetDmTinhThanhResponse",
+            localName = "GetDmTinhThanhResponse",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
     public GetDmTinhThanhResponse getDmTinhThanh(@WebParam(
             name = "request",
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetDmTinhThanhRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
         GetDmTinhThanhResponse ret = new GetDmTinhThanhResponse();
-//        try {
-//            List<DanhMucTinhThanh>temp= readDanhMuc.getDmTinhThanh();
-//            List<DmTinhThanh>temp= ServiceDmTinhThanh.getAllDmTinhThanh();
-        List<DmTinhThanh> temp = ServiceSumary.getAllDmTinhThanh();
-        if (temp != null) {
-            if (temp.size() > 0) {
-                ret.setListDm(temp);
-                ret.setCount_((long) temp.size());
-                ret.setMessage_("Success");
-                ret.setStatus_(true);
-                return ret;
+        try {
+            List<DmTinhThanhEntity> temp = ServiceCrudDanhMuc.getAllDmTinhThanh();
+            if (temp != null) {
+                if (temp.size() > 0) {
+                    ret.setListTt(temp);
+                    ret.setCount_((long) temp.size());
+                    ret.setMessage_("Success");
+                    ret.setStatus_(true);
+                    return ret;
+                } else {
+                    ret.setStatus_(false);
+                    ret.setMessage_("Fail");
+                    return ret;
+                }
             } else {
                 ret.setStatus_(false);
-                ret.setMessage_("Fail");
+                ret.setMessage_("Không đọc được dữ liệu");
                 return ret;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            ret.setMessage_(e.getMessage());
+            ret.setStatus_(false);
+            return ret;
+        }
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    @Override
+    @WebMethod(
+            action = "CategoriesQltb/UpdateDmTinhThanhByMaTinhThanh",
+            operationName = "UpdateDmTinhThanhByMaTinhThanh",
+            exclude = false
+    )
+    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+    @RequestWrapper(
+            localName = "UpdateDmTinhThanhRequest",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    @ResponseWrapper(
+            localName = "UpdateDmTinhThanhResponse",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    public UpdateDmTinhThanhResponse updateDmTinhThanhByMaTinhThanh(@WebParam(
+            name = "request",
+            partName = "request",
+            targetNamespace = DefinedConfig.NAME_SPACE) UpdateDmTinhThanhRequest request) {
+        if (Commons.checkString(request.getMaTinhThanh()) || Commons.checkString(request.getMaVuTaiChinh())) {
+            return ServiceCrudDanhMuc.updateDmTinhThanhByMaTinhThanh(request.getMaTinhThanh(), request.getMaVuTaiChinh());
         } else {
-            ret.setStatus_(false);
-            ret.setMessage_("Không đọc được dữ liệu");
-            return ret;
+            return new UpdateDmTinhThanhResponse("Please enter information!", DefinedConfig.INPUT_INVALID, false);
         }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            ret.setMessage_(e.getMessage());
-//            ret.getErrorCode(e.getErrorCode());
-//            ret.setStatus_(false);
-//            return ret;
+    }
+    /**
+     * @param request
+     * @return
+     */
+    @Override
+    @WebMethod(
+            action = "CategoriesQltb/CreateDmTinhThanhByAdmin",
+            operationName = "CreateDmTinhThanhByAdmin",
+            exclude = false
+    )
+    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+    @RequestWrapper(
+            localName = "CreateDmTinhThanhRequest",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    @ResponseWrapper(
+            localName = "CreateDmTinhThanhResponse",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    public CreateDmTinhThanhResponse createDmTinhThanhByAdmin(@WebParam(
+            name = "request",
+            partName = "request",
+            targetNamespace = DefinedConfig.NAME_SPACE) CreateDmTinhThanhRequest request) {
+        return new CreateDmTinhThanhResponse();
+//        if (Commons.c) {
+//            return ServiceCrudDanhMuc.updateDmTinhThanhByMaTinhThanh(request.getMaTinhThanh(), request.getMaVuTaiChinh());
+//        } else {
+//            return new UpdateDmTinhThanhResponse("Please enter information!", DefinedConfig.INPUT_INVALID, false);
 //        }
-
     }
-
     /**
      * @param request
      * @return
      */
     @Override
     @WebMethod(
-            action = "CategoriesQltb/GetDmQuanHuyen",
-            operationName = "GetDmQuanHuyen",
+            action = "CategoriesQltb/DeleteFileSftp",
+            operationName = "DeleteFileSftp",
             exclude = false
     )
     @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
     @RequestWrapper(
-            localName = "QltbGetDmQuanHuyenRequest",
+            localName = "QltbDeleteFileSftpRequest",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
     @ResponseWrapper(
-            localName = "QltbGetDmQuanHuyenResponse",
+            localName = "QltbDeleteFileSftpResponse",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
-    public GetDmQuanHuyenResponse getDmQuanHuyen(@WebParam(
+    public DeleteFileSftpResponse deleteFileSftp(@WebParam(
             name = "request",
             partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE) GetDmQuanHuyenRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
-        GetDmQuanHuyenResponse ret = new GetDmQuanHuyenResponse();
-        try {
-            List<DanhMucQuanHuyen> temp = readDanhMuc.getDmQuanHuyen();
-            if (temp != null) {
-                if (temp.size() > 0) {
-                    ret.setListDm(temp);
-                    ret.setCount_((long) temp.size());
-                    ret.setMessage_("Success");
-                    ret.setStatus_(true);
-                    return ret;
-                } else {
-                    ret.setStatus_(false);
-                    ret.setMessage_("Fail");
-                    return ret;
-                }
-            } else {
-                ret.setStatus_(false);
-                ret.setMessage_("Không đọc được dữ liệu");
-                return ret;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ret.setMessage_(e.getMessage());
-            ret.getErrorCode(e.getErrorCode());
-            ret.setStatus_(false);
-            return ret;
+            targetNamespace = DefinedConfig.NAME_SPACE) DeleteFileSftpRequest request) {
+        if(!Commons.checkString(request.getPathFile())){
+            return new DeleteFileSftpResponse("Invalid Path",false);
         }
+        Commons cm = new Commons();
+        boolean status=cm.deleteFile(request.getPathFile());
+        if(status){
+            return new DeleteFileSftpResponse("Success",true);
+        }else return new DeleteFileSftpResponse("Delete fail",false);
     }
-
     /**
      * @param request
      * @return
      */
     @Override
     @WebMethod(
-            action = "CategoriesQltb/GetDmDonVi",
-            operationName = "GetDmDonVi",
+            action = "CategoriesQltb/UpdateFileSftp",
+            operationName = "UpdateFileSftp",
             exclude = false
     )
     @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
     @RequestWrapper(
-            localName = "QltbGetDmDonViRequest",
+            localName = "QltbUpdateFileSftpRequest",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
     @ResponseWrapper(
-            localName = "QltbGetDmDonViResponse",
+            localName = "QltbUpdateFileSftpResponse",
             targetNamespace = DefinedConfig.NAME_SPACE
     )
-    public GetDmDonViResponse getDmDonVi(@WebParam(
+    public UpdateFileSftpResponse updateFileSftp(@WebParam(
             name = "request",
             partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE) GetDmDonViRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
-        GetDmDonViResponse ret = new GetDmDonViResponse();
-        try {
-            List<DanhMucDonViQltb> temp = readDanhMuc.getDmDonViQltb();
-            if (temp != null) {
-                if (temp.size() > 0) {
-                    ret.setList(temp);
-                    ret.setCount_((long) temp.size());
-                    ret.setMessage_("Success");
-                    ret.setStatus_(true);
-                    return ret;
-                } else {
-                    ret.setStatus_(false);
-                    ret.setMessage_("Fail");
-                    return ret;
-                }
-            } else {
-                ret.setStatus_(false);
-                ret.setMessage_("Không đọc được dữ liệu");
-                return ret;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ret.setMessage_(e.getMessage());
-            ret.getErrorCode(e.getErrorCode());
-            ret.setStatus_(false);
-            return ret;
+            targetNamespace = DefinedConfig.NAME_SPACE) UpdateFileSftpRequest request) {
+        if(!Commons.checkString(request.getPath(),request.getFileSftp().getFileName(),request.getFileSftp().getEncoded()) || request.getFileSftp().getType() == 0){
+            return new UpdateFileSftpResponse("Invalid data",false,"");
         }
-
+        Commons cm = new Commons();
+        UploadFileSuccess up=cm.updateFile(request.getPath(),request.getFileSftp());
+        if(up!=null){
+            return new UpdateFileSftpResponse("Success",true,up.getLink());
+        }else return new UpdateFileSftpResponse("Delete fail",false,"");
     }
-
-    /**
-     * @param request
-     * @return
-     */
-    @Override
-    @WebMethod(
-            action = "CategoriesQltb/GetDmChucVu",
-            operationName = "GetDmChucVu",
-            exclude = false
-    )
-    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
-    @RequestWrapper(
-            localName = "QltbGetDmChucVuRequest",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    @ResponseWrapper(
-            localName = "QltbGetDmChucVuResponse",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    public GetDmChucVuResponse getDmChucVu(@WebParam(
-            name = "request",
-            partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE) GetDmChucVuRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
-        GetDmChucVuResponse ret = new GetDmChucVuResponse();
-        try {
-            List<DanhMucChucVu> temp = readDanhMuc.getDmChucVu();
-            if (temp != null) {
-                if (temp.size() > 0) {
-                    ret.setListDm(temp);
-                    ret.setCount_((long) temp.size());
-                    ret.setMessage_("Success");
-                    ret.setStatus_(true);
-                    return ret;
-                } else {
-                    ret.setStatus_(false);
-                    ret.setMessage_("Fail");
-                    return ret;
-                }
-            } else {
-                ret.setStatus_(false);
-                ret.setMessage_("Không đọc được dữ liệu");
-                return ret;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ret.setMessage_(e.getMessage());
-            ret.getErrorCode(e.getErrorCode());
-            ret.setStatus_(false);
-            return ret;
-        }
-
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    @Override
-    @WebMethod(
-            action = "CategoriesQltb/GetDmDonViCungCap",
-            operationName = "GetDmDonViCungCap",
-            exclude = false
-    )
-    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
-    @RequestWrapper(
-            localName = "QltbGetDmDonViCungCapRequest",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    @ResponseWrapper(
-            localName = "QltbGetDmDonViCungCapResponse",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    public GetDmDonViCungCapResponse getDmDonViCungCap(@WebParam(
-            name = "request",
-            partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE) GetDmDonViCungCapRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
-        GetDmDonViCungCapResponse ret = new GetDmDonViCungCapResponse();
-        try {
-            List<DmDonViCungCap> temp = readDanhMuc.getDmDonViCungCap();
-            if (temp != null) {
-                if (temp.size() > 0) {
-                    ret.setListDm(temp);
-                    ret.setCount_((long) temp.size());
-                    ret.setMessage_("Success");
-                    ret.setStatus_(true);
-                    return ret;
-                } else {
-                    ret.setStatus_(false);
-                    ret.setMessage_("Fail");
-                    return ret;
-                }
-            } else {
-                ret.setStatus_(false);
-                ret.setMessage_("Không đọc được dữ liệu");
-                return ret;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ret.setMessage_(e.getMessage());
-            ret.getErrorCode(e.getErrorCode());
-            ret.setStatus_(false);
-            return ret;
-        }
-
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    @Override
-    @WebMethod(
-            action = "CategoriesQltb/GetDmNhomTb",
-            operationName = "GetDmNhomTb",
-            exclude = false
-    )
-    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
-    @RequestWrapper(
-            localName = "QltbGetDmNhomTbRequest",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    @ResponseWrapper(
-            localName = "QltbGetDmNhomTbResponse",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    public GetDmNhomTbResponse getDmNhomTB(@WebParam(
-            name = "request",
-            partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE) GetDmNhomTbRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
-        GetDmNhomTbResponse ret = new GetDmNhomTbResponse();
-        try {
-            List<DmNhomTB> temp = readDanhMuc.getDmNhomTB();
-            if (temp != null) {
-                if (temp.size() > 0) {
-                    ret.setListDm(temp);
-                    ret.setCount_((long) temp.size());
-                    ret.setMessage_("Success");
-                    ret.setStatus_(true);
-                    return ret;
-                } else {
-                    ret.setStatus_(false);
-                    ret.setMessage_("Fail");
-                    return ret;
-                }
-            } else {
-                ret.setStatus_(false);
-                ret.setMessage_("Không đọc được dữ liệu");
-                return ret;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ret.setMessage_(e.getMessage());
-            ret.getErrorCode(e.getErrorCode());
-            ret.setStatus_(false);
-            return ret;
-        }
-
-    }
-
-    /**
-     * @param request
-     * @return
-     */
-    @Override
-    @WebMethod(
-            action = "CategoriesQltb/GetDmLoaiTb",
-            operationName = "GetDmLoaiTb",
-            exclude = false
-    )
-    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
-    @RequestWrapper(
-            localName = "QltbGetDmLoaiTbRequest",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    @ResponseWrapper(
-            localName = "QltbGetDmLoaiTbResponse",
-            targetNamespace = DefinedConfig.NAME_SPACE
-    )
-    public GetDmLoaiTbResponse getDmLoaiTB(@WebParam(
-            name = "request",
-            partName = "request",
-            targetNamespace = DefinedConfig.NAME_SPACE) GetDmLoaiTbRequest request) {
-        ReadDanhMuc readDanhMuc = new ReadDanhMuc();
-        GetDmLoaiTbResponse ret = new GetDmLoaiTbResponse();
-        try {
-            List<DmLoaiTb> temp = readDanhMuc.getDmLoaiTb();
-            if (temp != null) {
-                if (temp.size() > 0) {
-                    ret.setListDm(temp);
-                    ret.setCount_((long) temp.size());
-                    ret.setMessage_("Success");
-                    ret.setStatus_(true);
-                    return ret;
-                } else {
-                    ret.setStatus_(false);
-                    ret.setMessage_("Fail");
-                    return ret;
-                }
-            } else {
-                ret.setStatus_(false);
-                ret.setMessage_("Không đọc được dữ liệu");
-                return ret;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            ret.setMessage_(e.getMessage());
-            ret.getErrorCode(e.getErrorCode());
-            ret.setStatus_(false);
-            return ret;
-        }
-
-    }
-
 }
