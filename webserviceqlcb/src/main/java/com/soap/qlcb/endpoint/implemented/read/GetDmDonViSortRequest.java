@@ -1,5 +1,7 @@
 package com.soap.qlcb.endpoint.implemented.read;
 
+import com.soap.qlcb.endpoint.implemented.BasicRequest;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -9,7 +11,7 @@ import javax.xml.bind.annotation.XmlAttribute;
  * com.soap.qlcb.endpoint.implemented.read
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class GetDmDonViSortRequest {
+public class GetDmDonViSortRequest extends BasicRequest{
     private long id;
     private String search="";
     public long getId() {

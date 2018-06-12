@@ -11,7 +11,7 @@ import java.util.List;
  * com.soap.demo.endpoint.implemented.basic
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class SaveFileFtpRequest {
+public class SaveFileFtpRequest extends BasicRequest{
     List<FileSftp> listFile;
 
     public List<FileSftp> getListFile() {

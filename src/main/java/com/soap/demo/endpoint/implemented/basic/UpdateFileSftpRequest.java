@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
  * com.soap.demo.endpoint.implemented.basic
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class UpdateFileSftpRequest {
+public class UpdateFileSftpRequest extends BasicRequest {
     @XmlElement(name = "path",namespace = DefinedConfig.NAME_SPACE)
     private String path;
     @XmlElement(name = "fileSftp",namespace = DefinedConfig.NAME_SPACE)

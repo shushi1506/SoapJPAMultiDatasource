@@ -1,5 +1,7 @@
 package com.soap.qlcb.endpoint.implemented.read;
 
+import com.soap.qlcb.endpoint.implemented.BasicRequest;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
@@ -8,7 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
  * com.soap.qlcb.endpoint.implemented.read
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class GetCbCanBoByIdRequest {
+public class GetCbCanBoByIdRequest extends BasicRequest {
     private long id;
 
     public long getId() {

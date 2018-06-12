@@ -3,8 +3,7 @@ package com.soap.demo.endpoint;
 
 
 import com.soap.demo.endpoint.implemented.basic.*;
-import com.soap.demo.endpoint.implemented.basic.create.CreateDmTinhThanhRequest;
-import com.soap.demo.endpoint.implemented.basic.create.CreateDmTinhThanhResponse;
+import com.soap.demo.endpoint.implemented.basic.create.*;
 import com.soap.demo.endpoint.implemented.basic.read.*;
 import com.soap.demo.endpoint.implemented.basic.update.UpdateDmTinhThanhRequest;
 import com.soap.demo.endpoint.implemented.basic.update.UpdateDmTinhThanhResponse;
@@ -31,4 +30,7 @@ public interface SoapInterfaceService {
     public CreateDmTinhThanhResponse createDmTinhThanhByAdmin(CreateDmTinhThanhRequest request);
     DeleteFileSftpResponse deleteFileSftp(DeleteFileSftpRequest request);
     UpdateFileSftpResponse updateFileSftp(UpdateFileSftpRequest request);
+    CreateImageBarcodeQrResponse createImageQr(CreateImageBarcodeQrRequest request);
+    CreatePdfBarcodeQrResponse createPdfQr(CreatePdfBarcodeQrRequest request);
+    CreateTokenResponse createToken(CreateTokenRequest request);
 }

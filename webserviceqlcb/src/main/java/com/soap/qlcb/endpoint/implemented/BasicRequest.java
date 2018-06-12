@@ -14,6 +14,7 @@ public class BasicRequest {
     private String username_;
 
     public BasicRequest() {
+        username_="";
     }
 
     public String getUsername_() {

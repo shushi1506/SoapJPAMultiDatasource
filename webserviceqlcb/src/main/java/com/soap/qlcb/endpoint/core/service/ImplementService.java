@@ -36,7 +36,7 @@ public interface ImplementService {
     boolean serviceCreateCbCanBoDetail(List<CbCanBoDetailEntityCustom> list);
 
     @Transactional
-    boolean serviceCreateDmDonVi(List<DmDonViEntity> list);
+    boolean serviceCreateDmDonVi(List<DmDonViEntityFix> list);
 
     ServiceStatus serviceDeleteDmCanBo(long id);
 

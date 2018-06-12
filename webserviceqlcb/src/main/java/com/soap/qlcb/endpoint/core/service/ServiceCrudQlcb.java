@@ -33,13 +33,15 @@ public class ServiceCrudQlcb implements ImplementService {
     @Autowired
     DmPhongBanRepository dmPhongBanRepository;
     @Autowired
-    DmQuanHuyenRepository dmQuanHuyenRepository;
+    CommonDmDbhcRepository commonDmDbhcRepository;
     @Autowired
     DmChucVuRepository dmChucVuRepository;
     @Autowired
     CbCanBoRepository cbCanBoRepository;
     @Autowired
     CbCanBoDetailCustomRepository cbCanBoDetailCustomRepository;
+    @Autowired
+    DmDonViFixRepository dmDonViFixRepository;
 
     //region dm tinh thanh
     @Override
@@ -95,10 +97,8 @@ public class ServiceCrudQlcb implements ImplementService {
 //        dmPhongBanRepository.deleteById(id);
 //        return true;
 //    }
-    @Override
-    @Transactional(readOnly = true)
     public List<ResultDmPhongBan> serviceDmPhongBanQlcb() {
-        return dmPhongBanRepository.getDmPhongBanQlcb();
+        return dmPhongBanRepository.getDmPhongBanByProc();
     }
     //endregion
 
@@ -106,7 +106,7 @@ public class ServiceCrudQlcb implements ImplementService {
     @Override
     @Transactional(readOnly = true)
     public List<ResultDmQuanHuyen> serviceDmQuanHuyenQlcb() {
-        return dmQuanHuyenRepository.getDmQuanHuyenQlcb();
+        return commonDmDbhcRepository.getDmQuanHuyenQlcb();
     }
     //endregion
 
@@ -173,11 +173,13 @@ public class ServiceCrudQlcb implements ImplementService {
     }
     @Override
     @Transactional
-    public boolean serviceCreateDmDonVi(List<DmDonViEntity> list) {
-        dmDonViRepository.saveAll(list);
-        dmDonViRepository.flush();
+    public boolean serviceCreateDmDonVi(List<DmDonViEntityFix> list) {
+        dmDonViFixRepository.saveAll(list);
+        dmDonViFixRepository.flush();
         return true;
     }
+
+
 
     @Override
     @Transactional

@@ -1,13 +1,16 @@
 package com.soap.demo;
 
 
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.soap.demo.endpoint.SoapInterfaceService;
 import com.soap.demo.endpoint.core.Utils.Commons;
 import com.soap.demo.endpoint.core.Utils.UploadFileSuccess;
+import com.soap.demo.endpoint.core.api.Pkcs12Crypto;
 import com.soap.demo.endpoint.core.crud.ServiceCrudDanhMuc;
 import com.soap.demo.endpoint.implemented.basic.*;
-import com.soap.demo.endpoint.implemented.basic.create.CreateDmTinhThanhRequest;
-import com.soap.demo.endpoint.implemented.basic.create.CreateDmTinhThanhResponse;
+import com.soap.demo.endpoint.implemented.basic.create.*;
 import com.soap.demo.endpoint.implemented.basic.read.*;
 import com.soap.demo.endpoint.implemented.basic.update.UpdateDmTinhThanhRequest;
 import com.soap.demo.endpoint.implemented.basic.update.UpdateDmTinhThanhResponse;
@@ -17,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.validation.annotation.Validated;
+import shushi.support.barcode.GeneralBarcode;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -26,7 +30,8 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.WebFault;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * @author anhbt 5/5/2018
@@ -235,6 +240,7 @@ public class SoapBasicMain implements SoapInterfaceService {
             name = "request",
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) SaveFileFtpRequest request) {
+        log.info(request.getUsername_()+ "_ Call saveFileToFtp_"+ new Date());
         SaveFileFtpRespone ret = new SaveFileFtpRespone();
         List<FileSftp> listFile = request.getListFile();
         if (listFile == null || listFile.size() == 0) {
@@ -266,7 +272,7 @@ public class SoapBasicMain implements SoapInterfaceService {
 //            ret.setMessage("No type upload");
 //            return ret;
 //        }
-        List<UploadFileSuccess> sp = cm.upLoadListFile(listFile);
+        List<UploadFileSuccess> sp = cm.upLoadListFileFtp(listFile);
         if (sp.size() == listFile.size()) {
             ret.setMessage("Success");
             ret.setErrorCode("00");
@@ -464,11 +470,12 @@ public class SoapBasicMain implements SoapInterfaceService {
             name = "request",
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) DeleteFileSftpRequest request) {
+        log.info(request.getUsername_()+ "_ Call deleteFileSFtp_"+ new Date());
         if(!Commons.checkString(request.getPathFile())){
             return new DeleteFileSftpResponse("Invalid Path",false);
         }
         Commons cm = new Commons();
-        boolean status=cm.deleteFile(request.getPathFile());
+        boolean status=cm.deleteFileMultiSystem(request.getPathFile());
         if(status){
             return new DeleteFileSftpResponse("Success",true);
         }else return new DeleteFileSftpResponse("Delete fail",false);
@@ -496,13 +503,152 @@ public class SoapBasicMain implements SoapInterfaceService {
             name = "request",
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) UpdateFileSftpRequest request) {
+        log.info(request.getUsername_()+ "_ Call updateFileSFtp_"+ new Date());
         if(!Commons.checkString(request.getPath(),request.getFileSftp().getFileName(),request.getFileSftp().getEncoded()) || request.getFileSftp().getType() == 0){
             return new UpdateFileSftpResponse("Invalid data",false,"");
         }
         Commons cm = new Commons();
-        UploadFileSuccess up=cm.updateFile(request.getPath(),request.getFileSftp());
+        UploadFileSuccess up=cm.updateFileFtp(request.getPath(),request.getFileSftp());
         if(up!=null){
             return new UpdateFileSftpResponse("Success",true,up.getLink());
         }else return new UpdateFileSftpResponse("Delete fail",false,"");
+    }
+    /**
+     * @param request
+     * @return
+     */
+    @Override
+    @WebMethod(
+            action = "CategoriesQltb/CreateImageQr",
+            operationName = "CreateImageQr",
+            exclude = false
+    )
+    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+    @RequestWrapper(
+            localName = "QltbCreateImageBarcodeQrRequest",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    @ResponseWrapper(
+            localName = "QltbCreateImageBarcodeQrResponse",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    public CreateImageBarcodeQrResponse createImageQr(@WebParam(
+            name = "request",
+            partName = "request",
+            targetNamespace = DefinedConfig.NAME_SPACE) CreateImageBarcodeQrRequest request) {
+        log.info(request.getUsername_()+ "_ Call createImageQr"+ new Date());
+        if(!Commons.checkString(request.getData())){
+            return new CreateImageBarcodeQrResponse("Invalid data",false,"");
+        }
+        String re = null;
+        try {
+            Map hintMap2 = new HashMap();
+            hintMap2.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            hintMap2.put(EncodeHintType.MARGIN,0);
+            re= GeneralBarcode.imageBarcodeQrToBase64String(request.getData(),"png",70,70,hintMap2);
+        } catch (WriterException e) {
+           log.error(e.getMessage());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        if(Commons.checkString(re)){
+            return new CreateImageBarcodeQrResponse("Success",true,re);
+        }else return new CreateImageBarcodeQrResponse("Fail Data",false,"");
+    }
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @WebMethod(
+            action = "CategoriesQltb/CreatePdfQr",
+            operationName = "CreatePdfQr",
+            exclude = false
+    )
+    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+    @RequestWrapper(
+            localName = "QltbCreatePdfBarcodeQrRequest",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    @ResponseWrapper(
+            localName = "QltbCreatePdfBarcodeQrResponse",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    public CreatePdfBarcodeQrResponse createPdfQr(@WebParam(
+            name = "request",
+            partName = "request",
+            targetNamespace = DefinedConfig.NAME_SPACE) CreatePdfBarcodeQrRequest request) {
+        log.info(request.getUsername_()+ "_ Call createPdfQr"+ new Date());
+        if(request.getCodes()== null || request.getCodes().isEmpty() ){
+            return new CreatePdfBarcodeQrResponse("Invalid data",false,"");
+        }
+        String re = null;
+        try {
+            re= GeneralBarcode.pdfListBarcodeQrToBase64String("data/app/services/apiqlcb/file/temp/pdf",request.getCodes(),new float[]{2.5f,2.5f,2.5f,2.5f},10,2,null,true);
+        } catch (WriterException e) {
+            log.error(e.getMessage());
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        if(Commons.checkString(re)){
+            return new CreatePdfBarcodeQrResponse("Success",true,re);
+        }else return new CreatePdfBarcodeQrResponse("Fail Data",false,"");
+    }
+
+    /**
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @WebMethod(
+            action = "CategoriesQltb/CreateToken",
+            operationName = "CreateToken",
+            exclude = false
+    )
+    @WebResult(name = "GetData", targetNamespace = DefinedConfig.NAME_SPACE)
+    @RequestWrapper(
+            localName = "QltbCreateTokenRequest",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    @ResponseWrapper(
+            localName = "QltbCreateTokenResponse",
+            targetNamespace = DefinedConfig.NAME_SPACE
+    )
+    public CreateTokenResponse createToken(@WebParam(
+            name = "request",
+            partName = "request",
+            targetNamespace = DefinedConfig.NAME_SPACE) CreateTokenRequest request) {
+        log.info(request.getUsername_()+ "_ Call createToken"+ new Date());
+        Pkcs12Crypto pkcs12Crypto=new Pkcs12Crypto();
+        if(Commons.checkString(request.getToken())){
+            try {
+                String decrypt=pkcs12Crypto.decryptText(request.getToken(),pkcs12Crypto.getPrivateKey(DefinedConfig.PKCS12_FILE,DefinedConfig.PKCS12_PASSWORD,DefinedConfig.PKCS12_ALIAS));
+                String[] temp=decrypt.split("_");
+                if(Commons.isExpried(Long.valueOf(temp[temp.length-1]))){
+                    return new CreateTokenResponse("Token còn hạn",true,"");
+                }else {
+                    return new CreateTokenResponse("Token hết hạn",false,"");
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                return new CreateTokenResponse("Token không hợp lệ",false,"");
+            }
+        }
+        if(Commons.checkString(request.getData())){
+            Calendar calendar=new GregorianCalendar();
+            calendar.add(Calendar.MINUTE,30);
+            try {
+                String encrypt=pkcs12Crypto.encryptText(request.getData()+"_"+calendar.getTimeInMillis(),pkcs12Crypto.getPublicKey(DefinedConfig.PKCS12_FILE,DefinedConfig.PKCS12_PASSWORD,DefinedConfig.PKCS12_ALIAS));
+                return new CreateTokenResponse("Success",true,encrypt);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                return new CreateTokenResponse("Invalid data "+ e.getMessage(),false,"");
+            }
+        }else return new CreateTokenResponse("Invalid data",false,"");
     }
 }

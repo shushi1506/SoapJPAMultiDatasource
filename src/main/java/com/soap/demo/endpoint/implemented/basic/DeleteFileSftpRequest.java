@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
  * com.soap.demo.endpoint.implemented.basic
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DeleteFileSftpRequest {
+public class DeleteFileSftpRequest extends BasicRequest {
     private String pathFile;
 
     public String getPathFile() {

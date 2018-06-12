@@ -46,7 +46,7 @@ public class ServiceCrudDanhMuc {
     public static boolean createDongBoDmCanBo(List<CbCanBoEntity>list){return serviceCrudQlcb.serviceCreateDmCanBo(list);}
     public static boolean createDongBoDmChucVu(List<DmChucVuEntity>list){return serviceCrudQlcb.serviceCreateDmChucVu(list);}
     public static boolean createDongBoDmPhongBan(List<DmPhongBanEntity>list){return serviceCrudQlcb.serviceCreateDmPhongBan(list);}
-    public static boolean createDongBoDmDonVi(List<DmDonViEntity>list){return serviceCrudQlcb.serviceCreateDmDonVi(list);}
+    public static boolean createDongBoDmDonVi(List<DmDonViEntityFix>list){return serviceCrudQlcb.serviceCreateDmDonVi(list);}
     public static boolean createDongBoCbCanBoDetail(List<CbCanBoDetailEntityCustom>list){return serviceCrudQlcb.serviceCreateCbCanBoDetail(list);}
     public static ServiceStatus deleteDongBoDmCanBo(long id){return serviceCrudQlcb.serviceDeleteDmCanBo(id);}
     public static ServiceStatus deleteDongBoDmCanBoDetail(long id){return serviceCrudQlcb.serviceDeleteDmCanBoDetail(id);}

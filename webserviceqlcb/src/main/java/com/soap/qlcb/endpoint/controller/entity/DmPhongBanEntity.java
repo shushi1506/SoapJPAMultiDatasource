@@ -1,5 +1,8 @@
 package com.soap.qlcb.endpoint.controller.entity;
 
+import com.soap.qlcb.endpoint.controller.results.ResultDmDonVi;
+import com.soap.qlcb.endpoint.controller.results.ResultDmPhongBan;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -9,9 +12,16 @@ import java.sql.Time;
  * @author anhbt 5/15/2018
  * com.soap.demo.qlcb.model
  */
-@Entity
-@Table(name = "DM_PHONG_BAN", schema = "QLTB", catalog = "")
 @XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(name = "DM_PHONG_BAN")
+@NamedStoredProcedureQueries({
+        @NamedStoredProcedureQuery(name = "DmPhongBanEntity.procGetDmPhongBan",
+                procedureName = "dm_phong_ban_qltb_select",
+                resultClasses = ResultDmPhongBan.class,
+                parameters = {
+                        @StoredProcedureParameter(name = "p_recordset",mode = ParameterMode.REF_CURSOR, type = void.class) })
+})
 public class DmPhongBanEntity {
     private long id;
     private String maPhongBan;

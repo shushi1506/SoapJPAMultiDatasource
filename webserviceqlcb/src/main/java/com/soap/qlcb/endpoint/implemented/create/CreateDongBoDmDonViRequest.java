@@ -1,6 +1,7 @@
 package com.soap.qlcb.endpoint.implemented.create;
 
 import com.soap.qlcb.endpoint.controller.entity.DmDonViEntity;
+import com.soap.qlcb.endpoint.controller.entity.DmDonViEntityFix;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,12 +15,12 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CreateDongBoDmDonViRequest {
     @XmlElement
-    private List<DmDonViEntity>dmDonViEntities;
+    private List<DmDonViEntityFix>dmDonViEntities;
 
-    public List<DmDonViEntity> getDmDonViEntities() {
+    public List<DmDonViEntityFix> getDmDonViEntities() {
         return dmDonViEntities;
     }
-    public void setDmDonViEntities(List<DmDonViEntity> dmDonViEntities) {
+    public void setDmDonViEntities(List<DmDonViEntityFix> dmDonViEntities) {
         this.dmDonViEntities = dmDonViEntities;
     }
 }

@@ -91,7 +91,6 @@ public class DmDonViEntity {
     private String tenTiengViet;
     private String tenTiengAnh;
     private String tenVietTat;
-    private DmTinhThanh dmTinhThanh;
     private Long tinhThanhId;
     private String diaChi;
     private String dienThoai;
@@ -162,17 +161,6 @@ public class DmDonViEntity {
 
     public void setTinhThanhId(Long tinhThanhId) {
         this.tinhThanhId = tinhThanhId;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "TINH_THANH_ID")
-    @BatchSize(size = 60)
-    public DmTinhThanh getDmTinhThanh() {
-        return dmTinhThanh;
-    }
-
-    public void setDmTinhThanh(DmTinhThanh dmTinhThanh) {
-        this.dmTinhThanh = dmTinhThanh;
     }
 
     @Basic
