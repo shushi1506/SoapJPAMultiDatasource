@@ -1,18 +1,17 @@
 package com.soap.demo;
 
-import com.soap.demo.endpoint.core.crud.ReadDanhMuc;
-import com.soap.demo.endpoint.implemented.basic.model.DanhMucDonViQltb;
-import com.soap.demo.endpoint.implemented.basic.model.DanhMucPhongBan;
+import com.google.zxing.WriterException;
+import shushi.support.barcode.GeneralBarcode;
 
-import java.sql.SQLException;
-import java.util.List;
+import java.io.IOException;
+
 
 /**
  * @author anhbt 5/9/2018
  * com.soap.demo
  */
 public class testGetDmPhongBan {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, WriterException {
 //        ReadDanhMuc readDanhMuc =new ReadDanhMuc();
 //        try {
 //            List<DanhMucDonViQltb> example= readDanhMuc.getDmDonViQltb();
@@ -20,13 +19,17 @@ public class testGetDmPhongBan {
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
-        String examp="ID;MA_DON_VI;TEN_DON_VI;DIA_CHI;SDT;MO_TA;NGUOI_TAO;NGAY_TAO;NGUOI_CAP_NHAT;NGAY_CAP_NHAT";
-        String[] temp = examp.split(";");
-        StringBuffer sb = new StringBuffer();
-        for (int i=0; i< temp.length;i++){
-            sb.append(toVariableCase(temp[i])).append(";");
-        }
-        System.out.println(sb.toString().trim());
+//        StateReponse t=new StateReponse();
+//        System.out.println(Commons.checkString(t,"uyuyu","","3r4r34"));
+//        String examp="ID;MA_DON_VI;TEN_DON_VI;DIA_CHI;SDT;MO_TA;NGUOI_TAO;NGAY_TAO;NGUOI_CAP_NHAT;NGAY_CAP_NHAT";
+//        String[] temp = examp.split(";");
+//        StringBuffer sb = new StringBuffer();
+//        for (int i=0; i< temp.length;i++){
+//            sb.append(toVariableCase(temp[i])).append(";");
+//        }
+//        System.out.println(sb.toString().trim());
+        System.out.println(GeneralBarcode.imageBarcodeQrToBase64String("Hello girl","png",200,200));
+
     }
     public static String toVariableCase(String givenString) {
 
