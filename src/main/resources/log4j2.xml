@@ -7,15 +7,15 @@
             <!--<PatternLayout pattern="%highlight{%d [%t] %-5level: %msg%n%throwable}{FATAL=white, ERROR=red, WARN=blue, INFO=black, DEBUG=green, TRACE=blue}"/>-->
         </Console>
         <!-- File Appender -->
-        <File name="File" fileName="applogs/app.log">
-            <PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n" />
+        <!--<File name="File" fileName="applogs/app.log">-->
+            <!--<PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n" />-->
             <!--<Policies>-->
                 <!--<SizeBasedTriggeringPolicy size="5 MB" />-->
             <!--</Policies>-->
             <!--<DefaultRolloverStrategy max="4"/>-->
-        </File>
+        <!--</File>-->
         <!-- Rolling File Appender -->
-        <RollingFile name="RollingFile" fileName="applogs/app2.log" filePattern="applogs/size-based-logs/%d{yyyy-MM-dd-hh-mm}.log">
+        <RollingFile name="RollingFile" fileName="data/app/services/apiqltb/log/apiqltb.log" filePattern="data/app/services/apiqltb/log/size-based-logs/%d{yyyy-MM-dd-hh-mm}.log">
             <!--<FilePattern>C:/log/time-based-logs/%d{yyyy-MM-dd-hh-mm}.log.zip</FilePattern>-->
             <PatternLayout>
                 <Pattern>%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n</Pattern>

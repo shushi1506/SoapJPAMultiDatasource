@@ -23,6 +23,7 @@ import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import javax.xml.ws.WebFault;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,6 +73,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetDmPhongBanRequest request) {
         GetDmPhongBanResponse ret = new GetDmPhongBanResponse();
+        log.info(request.getUsername_()+"_Call getDmPhongBan_"+new Date());
         try {
 //            List<DanhMucPhongBan> temp = readDanhMuc.getDmPhongBan();
             List<ResultDmPhongBan> temp= ServiceCrudDanhMuc.getResultDmPhongBanQlcb();
@@ -123,6 +125,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             targetNamespace = DefinedConfig.NAME_SPACE) GetDmQuanHuyenRequest request) {
 
         GetDmQuanHuyenResponse ret = new GetDmQuanHuyenResponse();
+        log.info(request.getUsername_()+"_Call getDmQuanHuyen_"+new Date());
         try {
             List<ResultDmQuanHuyen> temp = ServiceCrudDanhMuc.getResultDmQuanHuyenQlcb();
             if (temp != null) {
@@ -174,8 +177,9 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetDmDonViRequest request) {
         GetDmDonViResponse ret = new GetDmDonViResponse();
+        log.info(request.getUsername_()+"_Call getDmDonVi_"+new Date());
         try {
-            List<ResultDmDonVi> temp = ServiceCrudDanhMuc.getResultDmDonViQlcb();
+            List<ResultDmDonVi> temp = ServiceCrudDanhMuc.getResultDmDonViQlcbByProcdedure();
             if (temp != null) {
                 if (temp.size() > 0) {
                     ret.setList(temp);
@@ -225,6 +229,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetDmDonViRequest request) {
         GetDmDonViBtProcedureResponse ret = new GetDmDonViBtProcedureResponse();
+        log.info(request.getUsername_()+"_Call getDmDonVi2_"+new Date());
         try {
             List<ResultDmDonVi> temp = ServiceCrudDanhMuc.getResultDmDonViQlcbByProcdedure();
             if (temp != null) {
@@ -275,6 +280,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             name = "request",
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetDmChucVuRequest request) {
+        log.info(request.getUsername_()+"_Call getDmChucVu_"+new Date());
         GetDmChucVuResponse ret = new GetDmChucVuResponse();
         try {
             List<ResultDmChucVu> temp = ServiceCrudDanhMuc.getResultDmChucVuQlcb();
@@ -327,6 +333,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetCbCanBoRequest request) {
         GetCbCanBoResponse ret = new GetCbCanBoResponse();
+        log.info(request.getUsername_()+"_Call getCbCanBo_"+new Date());
         try {
 //            Page<ResultCbCanBo> t=ServiceCrudDanhMuc.getResultCbCanBoQlcbPage(request.getPage(),request.getSize());
 //            List<ResultCbCanBo> temp = ServiceCrudDanhMuc.getResultCbCanBoQlcb();
@@ -398,6 +405,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetCbCanBoByIdRequest request) {
         GetCbCanBoByIdResponse ret = new GetCbCanBoByIdResponse();
+        log.info(request.getUsername_()+"_Call getCbCanBoById_"+new Date());
         try {
             if(request.getId()==0){
                 ret.setStatus_(false);
@@ -449,6 +457,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             partName = "request",
             targetNamespace = DefinedConfig.NAME_SPACE) GetDmDonViSortRequest request) {
         GetDmDonViSortResponse ret = new GetDmDonViSortResponse();
+        log.info(request.getUsername_()+"_Call getDmDonViSort_"+new Date());
         try {
             if(request.getId()==0){
                 ret.setStatus_(false);
@@ -884,7 +893,7 @@ public class SoapServiceQlcbMain implements SoapServiceQlcb {
             targetNamespace = DefinedConfig.NAME_SPACE) CreateDongBoDmDonViRequest request) {
         CreateDongBoDmDonViResponse ret = new CreateDongBoDmDonViResponse();
         try {
-            List<DmDonViEntity> list=request.getDmDonViEntities();
+            List<DmDonViEntityFix> list=request.getDmDonViEntities();
             boolean tem=ServiceCrudDanhMuc.createDongBoDmDonVi(list);
             if(tem){
                 return new CreateDongBoDmDonViResponse("00","Success",true);
